@@ -17,6 +17,33 @@ static enum {
 	PRESSED
 };
 
+void WaKei::click(bool left) {
+
+	INPUT input = { 0 };
+	input.type = INPUT_MOUSE;
+	input.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | (left ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_RIGHTDOWN);
+	POINT mousePos = { 0 };
+	GetCursorPos(&mousePos);
+	input.mi.dx = mousePos.x;
+	input.mi.dy = mousePos.y;
+	SendInput(1, &input, sizeof(INPUT));
+	input.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | (left ? MOUSEEVENTF_LEFTUP : MOUSEEVENTF_RIGHTUP);
+	SendInput(1, &input, sizeof(INPUT));
+
+}
+
+void WaKei::press(int key) {
+
+	INPUT input = { 0 };
+	input.type = INPUT_KEYBOARD;
+	input.ki.wVk = key;
+	input.ki.wScan = MapVirtualKey(key, MAPVK_VK_TO_VSC);
+	SendInput(1, &input, sizeof(INPUT));
+	input.mi.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, &input, sizeof(INPUT));
+
+}
+
 static void WaKeiUpdateLoop() {
 
 	while (WaKei::isAsync) {

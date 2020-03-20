@@ -22,6 +22,10 @@ public:
 	static void setKeyCallback(void(*f)(int key, bool pressed));
 	/* Set async update loop sleep time */
 	static void setUpdateFrequency(long);
+	/* Simulate mouse click */
+	static void click(bool left);
+	/* Simulate key press */
+	static void press(int key);
 
 private:
 
