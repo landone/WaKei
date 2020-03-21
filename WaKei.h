@@ -10,6 +10,8 @@ public:
 	static void start();
 	/* End async update thread */
 	static void stop();
+	/* Is async thread running */
+	static bool isRunning();
 	/* Update current input data */
 	static void update();
 	/* Is the key down since last update */
@@ -23,7 +25,7 @@ public:
 	/* Set async update loop sleep time */
 	static void setUpdateFrequency(long);
 	/* Simulate mouse click */
-	static void click(bool left);
+	static void click(bool left = true);
 	/* Simulate key press */
 	static void press(int key);
 
@@ -31,7 +33,6 @@ private:
 
 	friend void WaKeiUpdateLoop();
 
-	static const int MAX_KEYS;
 	static const int SIG_BIT;
 	static bool isAsync;
 	static long SLEEP_TIME;

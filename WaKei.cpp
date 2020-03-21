@@ -44,6 +44,12 @@ void WaKei::press(int key) {
 
 }
 
+bool WaKei::isRunning() {
+
+	return isAsync;
+
+}
+
 static void WaKeiUpdateLoop() {
 
 	while (WaKei::isAsync) {
@@ -96,13 +102,26 @@ void WaKei::update() {
 
 	for (int i = 0; i < MAX_KEYS; i++) {
 		if (GetAsyncKeyState(i) & SIG_BIT) {
-			keys[i] = (keys[i] ? DOWN : PRESSED);
+			if (keys[i] < DOWN) {
+				keys[i] = PRESSED;
+				if (keyCallback) {
+					keyCallback(i, true);
+				}
+			}
+			else {
+				keys[i] = DOWN;
+			}
 		}
 		else {
-			keys[i] = (!keys[i] ? UP : RELEASED);
-		}
-		if (keyCallback && (keys[i] == PRESSED || keys[i] == RELEASED)) {
-			keyCallback(i, keys[i] == PRESSED);
+			if (keys[i] > RELEASED) {
+				keys[i] = RELEASED;
+				if (keyCallback) {
+					keyCallback(i, false);
+				}
+			}
+			else {
+				keys[i] = UP;
+			}
 		}
 	}
 
